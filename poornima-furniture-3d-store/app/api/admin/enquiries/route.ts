@@ -1,0 +1,5 @@
+import { NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/supabase-server';
+import { z } from 'zod';
+const inputSchema=z.object({id:z.string().uuid(),status:z.enum(['new','contacted','quoted','converted','closed']),internal_notes:z.string().max(3000).optional(),follow_up_at:z.string().datetime().nullable().optional()});
+export async function PATCH(request:Request){const {supabase,isAdmin}=await requireAdmin();if(!isAdmin)return NextResponse.json({error:'Administrator access required.'},{status:403});let body:unknown;try{body=await request.json()}catch{return NextResponse.json({error:'Invalid JSON.'},{status:400})}const parsed=inputSchema.safeParse(body);if(!parsed.success)return NextResponse.json({error:'Invalid enquiry update.'},{status:422});const {id,...changes}=parsed.data;const {data,error}=await supabase.from('enquiries').update(changes).eq('id',id).select('id,status,internal_notes,follow_up_at').single();if(error)return NextResponse.json({error:'Could not update enquiry.'},{status:400});return NextResponse.json({enquiry:data});}

@@ -1,0 +1,11 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { Box, ArrowUpRight, Rotate3D } from 'lucide-react';
+import { getCatalogueData } from '@/lib/store-data';
+import { ProductModelViewer } from '@/components/product-model-viewer';
+
+export const metadata: Metadata = { title: 'Interactive 3D Showroom', description: 'Explore supported furniture 3D models from Poornima Furniture.' };
+export default async function ShowroomPage() {
+ const { products } = await getCatalogueData(); const modeled = products.filter(p=>p.model_url);
+ return <><section className="page-header"><div className="section-shell"><span className="eyebrow">A NEW WAY TO EXPLORE</span><h1>The 3D <em>showroom.</em></h1><p>Rotate and inspect individual pieces when an interactive model is available. We only show models the showroom has supplied—no pretend 3D placeholders.</p></div></section><section className="showroom-page section-shell">{modeled.length ? <><div className="section-heading"><div><span className="eyebrow">INTERACTIVE MODELS</span><h2>Take a closer <em>look.</em></h2></div><span className="result-count">{modeled.length} model{modeled.length===1?'':'s'} available</span></div><div className="product-grid">{modeled.map(p=><article key={p.id} className="product-card"><div className="product-image-wrap" style={{aspectRatio:'4/3'}}><ProductModelViewer modelUrl={p.model_url!} productName={p.name}/></div><div className="product-meta"><div><span className="product-category">{p.category?.name||'Furniture'}</span><h3><Link href={`/catalogue/${p.slug}`}>{p.name}</Link></h3></div></div><Link href={`/catalogue/${p.slug}`} className="text-link">View product <ArrowUpRight size={15}/></Link></article>)}</div></> : <div className="showroom-panel"><div><div className="showroom-fallback-icon"><Rotate3D size={28}/></div><span className="eyebrow">INTERACTIVE FURNITURE VIEWER</span><h2>Your next piece, from every angle.</h2><p>There are no published 3D models yet. Once the showroom uploads an optimized GLB or GLTF model for a product, it will appear here with rotation and zoom controls. Until then, browse real product photographs and details instead.</p><Link href="/catalogue" className="button button-dark">Explore catalogue <ArrowUpRight size={16}/></Link></div></div>}</section></>;
+}
