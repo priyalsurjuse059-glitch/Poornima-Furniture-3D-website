@@ -1,0 +1,10 @@
+'use client';
+import { FormEvent, useState } from 'react';
+import Link from 'next/link';
+import { createBrowserClient } from '@supabase/ssr';
+
+export default function AdminLoginPage(){
+ const [email,setEmail]=useState('');const [password,setPassword]=useState('');const [busy,setBusy]=useState(false);const [message,setMessage]=useState('');
+ async function submit(e:FormEvent){e.preventDefault();setBusy(true);setMessage('');try{const url=process.env.NEXT_PUBLIC_SUPABASE_URL;const key=process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;if(!url||!key)throw new Error('Supabase is not configured yet. Add the environment variables in .env.local first.');const supabase=createBrowserClient(url,key);const {error}=await supabase.auth.signInWithPassword({email,password});if(error)throw error;window.location.assign('/admin');}catch(err){setMessage(err instanceof Error?err.message:'Could not sign in. Please check your credentials.');setBusy(false);}}
+ return <section className="admin-gate section-shell"><div style={{width:'min(100%,440px)',textAlign:'left'}}><span className="eyebrow">ADMINISTRATOR SIGN IN</span><h1 style={{fontSize:45,color:'var(--charcoal)',margin:'15px 0'}}>Welcome back.</h1><p>Sign in with an authorized Supabase account to manage products and customer enquiries.</p><form onSubmit={submit} className="admin-form" style={{gridTemplateColumns:'1fr',marginTop:24}}><div className="field"><label htmlFor="email">Email address</label><input className="input" id="email" type="email" required autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)}/></div><div className="field"><label htmlFor="password">Password</label><input className="input" id="password" type="password" required autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)}/></div>{message&&<p className="form-message" role="alert">{message}</p>}<button className="button button-dark" disabled={busy}>{busy?'Signing in…':'Sign in securely'}</button></form><Link href="/" className="text-link">Back to storefront</Link></div></section>;
+}

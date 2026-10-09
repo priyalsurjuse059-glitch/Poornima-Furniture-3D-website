@@ -1,0 +1,5 @@
+import Link from 'next/link';
+
+export function SiteFooter() {
+  return <footer className="site-footer"><div className="footer-top"><div><Link className="brand footer-brand" href="/"><span className="brand-mark">P</span><span><strong>POORNIMA</strong><small>FURNITURE · NAGPUR</small></span></Link><p>Thoughtful pieces for the spaces<br />you call home.</p></div><div><span className="eyebrow">EXPLORE</span><Link href="/catalogue">All furniture</Link><Link href="/catalogue?category=sofas">Sofas</Link><Link href="/catalogue?category=tv-units">TV units</Link><Link href="/showroom">3D showroom</Link></div><div><span className="eyebrow">VISIT</span><p>Sutgirni, Hingna Road,<br />Nagpur, Maharashtra, India</p><a href="https://www.google.com/maps/search/?api=1&query=Sutgirni%2C%20Hingna%20Road%2C%20Nagpur" target="_blank" rel="noreferrer">Get directions ↗</a><p className="muted">Phone and opening hours will appear here once configured.</p></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Poornima Furniture</span><span>Made with care for everyday living.</span></div></footer>;
+}

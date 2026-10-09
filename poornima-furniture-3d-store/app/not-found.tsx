@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export default function NotFound(){return <section className="admin-gate section-shell"><div><span className="eyebrow">404 / NOT FOUND</span><h1 style={{color:'var(--charcoal)',fontSize:52}}>This piece isn't here.</h1><p>That page may have moved, or this product may no longer be published.</p><Link className="button button-dark" href="/catalogue">Explore the collection</Link></div></section>}
